@@ -1,0 +1,39 @@
+#!/bin/bash
+# Ask the user for details
+echo Welcome !
+read -ep 'Username: ' uservar
+read -ep'email: ' emailvar
+echo Thankyou $uservar Please enter the name of the container you wish to have for your TeamSpeak server
+read -ep 'container_name: ' containervar
+echo Please enter DNS name for your TeamSpeak Server
+read -ep 'Server_name: ' servervar
+echo
+docker run -d -P --name=$containervar --hostname=$servervar  ts:a
+echo
+echo
+echo $containervar has been successfully start !
+echo Below are details
+echo -----------------
+echo
+echo Container Name: $containervar
+echo "----------------------------"
+echo Server Name: $servervar
+echo "----------------------"
+spvar=$(docker inspect --format '{{ .NetworkSettings.Ports }}' $containervar)
+echo
+echo Ports details to connect to your server: $spvar
+echo "-----------------------------------------------------------------------------------------------------"
+echo
+echo "Download TeamSpeak client from https://www.teamspeak.com/en/downloads.html"
+echo
+echo "Use $servervar:port" to connect to TeamSpeak Server
+echo
+echo "Port is equal to port mapped with 9987"
+now=$(date)
+echo
+echo Container started on $now
+echo "------------------------"
+echo
+echo $containervar billing cycle start $now
+echo
+echo Thanks ! You may now start using TeamSpeak Server

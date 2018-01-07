@@ -1,0 +1,32 @@
+## TEAM SPEAK SERVER IN CONTAINER
+## Base operating system Image
+FROM    centos:7
+
+## Metadata
+LABEL   maintainer=myself@hotmail.com \
+        teamspeakversion=3.1.7
+
+## Team Speak server installation
+
+RUN     yum -y install --setopt=tsflags=nodocs net-tools bzip2 perl tar && \
+        yum clean all && \
+        mkdir /opt/teamspeak/ && \
+        cd /opt/teamspeak/ && \
+        curl -O http://dl.4players.de/ts/releases/3.0.13.8/teamspeak3-server_linux_amd64-3.0.13.8.tar.bz2 && \
+        tar -xvf teamspeak3-server_linux_amd64-3.0.13.8.tar.bz2
+## Working directory
+
+WORKDIR /
+
+## Port opening for communication
+
+EXPOSE  9987/udp 10011 30033
+
+## Must Execution
+ENTRYPOINT      /opt/teamspeak/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh
+
+## FINISH
+## USAGE
+## Internet must be enabled on Docker HOST
+## docker build -t teamspeakserver:v3.1.7
+## docker run -d --name=teamspeakserver --hostname=teamspeakserver -P teamspeakserver:v3.1.7
